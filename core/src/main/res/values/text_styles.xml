@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ebcom">
+        <item name="android:fontFamily">@font/normal</item>
+    </style>
+
+    <style name="ebcom.Text" parent="ebcom">
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+    </style>
+
+    <style name="ebcom.Text.IranSansFaNumMedium14sp">
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:lineSpacingExtra">10sp</item>
+    </style>
+
+</resources>
