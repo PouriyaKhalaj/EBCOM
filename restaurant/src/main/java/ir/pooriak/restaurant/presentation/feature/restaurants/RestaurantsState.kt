@@ -21,4 +21,8 @@ sealed class RestaurantsState : BaseState {
 
 sealed class RestaurantsEvent : BaseViewModelEvent {
     data object Restaurants : RestaurantsEvent()
+    data class Favorite(val restaurant: Restaurant, val selected: Boolean) : RestaurantsEvent()
+
+    data class SortBy(val position: Int): RestaurantsEvent()
+
 }

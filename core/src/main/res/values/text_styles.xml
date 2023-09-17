@@ -2,17 +2,39 @@
 <resources>
 
     <style name="ebcom">
-        <item name="android:fontFamily">@font/normal</item>
+<!--        <item name="android:fontFamily">@font/normal</item>-->
     </style>
 
     <style name="ebcom.Text" parent="ebcom">
         <item name="android:textSize">@dimen/textSizeNormal</item>
     </style>
 
-    <style name="ebcom.Text.IranSansFaNumMedium14sp">
-        <item name="android:fontFamily">@font/medium</item>
+<!--    <style name="ebcom.Text.IranSansFaNumMedium14sp">-->
+<!--        <item name="android:fontFamily">@font/medium</item>-->
+<!--        <item name="android:textStyle">normal</item>-->
+<!--        <item name="android:textSize">@dimen/textSizeNormal</item>-->
+<!--        <item name="android:textColor">@color/black</item>-->
+<!--        <item name="android:lineSpacingExtra">10sp</item>-->
+<!--    </style>-->
+
+    <style name="ebcom.Text.EnMedium14sp">
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:lineSpacingExtra">10sp</item>
+    </style>
+
+
+    <style name="ebcom.Text.EnBold14sp">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:lineSpacingExtra">10sp</item>
+    </style>
+
+    <style name="ebcom.Text.EnBold16sp">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/textSizeBig</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:lineSpacingExtra">10sp</item>
     </style>

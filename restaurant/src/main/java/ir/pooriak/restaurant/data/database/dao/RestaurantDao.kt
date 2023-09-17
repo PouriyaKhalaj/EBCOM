@@ -17,4 +17,11 @@ interface RestaurantDao : BaseDao<RestaurantEntity> {
 
     @Query("DELETE FROM restaurant WHERE entity_id =:restaurantId")
     fun delete(restaurantId: Long): Completable
+
+    @Query("DELETE FROM restaurant")
+    fun deleteAll(): Completable
+
+
+    @Query("SELECT * FROM restaurant WHERE favorite = 1")
+    fun favorites(): Single<List<RestaurantEntity>>
 }

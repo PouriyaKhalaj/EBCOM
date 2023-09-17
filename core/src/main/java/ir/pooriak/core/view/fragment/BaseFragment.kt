@@ -23,6 +23,8 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        visibilityToolbarAction(true)
+        needHideToolbarEndIcon(true)
         setupView()
         setupUiListener()
         setupObservers()
@@ -61,6 +63,16 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    protected fun visibilityToolbarAction(show: Boolean) {
+        val activity = requireActivity()
+        if (activity is BaseActivity)
+            activity.visibilityToolbarAction(show)
+    }
+
+    private fun needHideToolbarEndIcon(show: Boolean) {
+        (activity as? BaseActivity)?.needHideToolbarEndIcon(show)
+    }
+
     protected fun toolbarActionIcon(@DrawableRes icon: Int, onClick: (View) -> Unit) {
         val activity = requireActivity()
         if (activity is BaseActivity)
@@ -73,6 +85,12 @@ abstract class BaseFragment : Fragment() {
             activity.toolbarActionIcon(icon)
     }
 
+    protected fun toolbarEndIcon(@DrawableRes icon: Int, onClick: ((View) -> Unit)? = null) {
+        val activity = requireActivity()
+        if (activity is BaseActivity)
+            activity.toolbarEndIcon(icon, onClick)
+    }
+
     protected fun showToolbar(show: Boolean) {
         val activity = requireActivity()
         if (activity is BaseActivity)
@@ -81,7 +99,7 @@ abstract class BaseFragment : Fragment() {
 
     fun toolbarTitle(
         @StringRes title: Int,
-        @StyleRes textAppearance: Int = R.style.ebcom_Text_IranSansFaNumMedium14sp
+        @StyleRes textAppearance: Int = R.style.ebcom_Text_EnBold16sp
     ) {
         val activity = requireActivity()
         if (activity is BaseActivity)
@@ -90,7 +108,7 @@ abstract class BaseFragment : Fragment() {
 
     fun toolbarTitle(
         title: String,
-        @StyleRes textAppearance: Int = R.style.ebcom_Text_IranSansFaNumMedium14sp
+        @StyleRes textAppearance: Int = R.style.ebcom_Text_EnBold16sp
     ) {
         val activity = requireActivity()
         if (activity is BaseActivity)

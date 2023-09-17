@@ -20,7 +20,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import ir.pooriak.core.R
 import ir.pooriak.core.databinding.ActivityBaseBinding
-import ir.pooriak.core.tools.locale.Locales
 import java.util.Locale
 
 /**
@@ -32,6 +31,8 @@ abstract class BaseActivity : AppCompatActivity() {
     private val localeDelegate = LocaleUtilActivityDelegateImpl()
 
     protected var navController: NavController? = null
+
+    protected var showToolbarActionIcon: Boolean = true
 
     abstract fun showToolbar(): Boolean
     abstract fun doOnCreate(savedInstanceState: Bundle?)
@@ -51,7 +52,7 @@ abstract class BaseActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         localeDelegate.onCreate(this)
-        updateLocale(Locales.PERSIAN)
+        updateLocale(Locale.ENGLISH)
 
         baseBinding = ActivityBaseBinding.inflate(layoutInflater)
         setContentView(baseBinding.root)
@@ -96,7 +97,17 @@ abstract class BaseActivity : AppCompatActivity() {
         baseBinding.appBarLayout.visibility = View.VISIBLE
         baseBinding.toolbarAction.setImageDrawable(ContextCompat.getDrawable(this, icon))
         baseBinding.toolbarAction.setOnClickListener(onClick)
+    }
 
+    fun toolbarEndIcon(@DrawableRes icon: Int, onClick: ((View) -> Unit)? = null) {
+        baseBinding.appBarLayout.visibility = View.VISIBLE
+        needHideToolbarEndIcon(false)
+        baseBinding.toolbarEnd.setImageDrawable(ContextCompat.getDrawable(this, icon))
+        baseBinding.toolbarEnd.setOnClickListener(onClick)
+    }
+
+    fun needHideToolbarEndIcon(show: Boolean) {
+        baseBinding.toolbarEnd.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     fun needHideToolbar(show: Boolean) {
@@ -141,6 +152,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun initializeToolbar() {
         baseBinding.appBarLayout.visibility = View.VISIBLE
+        visibilityToolbarAction()
         setSupportActionBar(baseBinding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
@@ -155,6 +167,11 @@ abstract class BaseActivity : AppCompatActivity() {
             hideKeyboard(this)
             onBackPressed()
         }
+    }
+
+    fun visibilityToolbarAction(show: Boolean = true) {
+        showToolbarActionIcon = show
+        baseBinding.toolbarAction.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun createIntent(context: Context, action: String, extras: Bundle? = null) =

@@ -8,26 +8,27 @@ import ir.pooriak.restaurant.data.remote.entity.RestaurantData
 import ir.pooriak.restaurant.data.remote.entity.SortingValuesData
 import ir.pooriak.restaurant.domain.model.Restaurant
 import ir.pooriak.restaurant.domain.model.SortingDetail
+import ir.pooriak.restaurant.domain.model.Status
 
 /**
  * Created by POORIAK on 15,September,2023
  */
 @Entity(tableName = "restaurant")
 data class RestaurantEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "entity_id")
+    var entityId: Long,
     val name: String,
     val status: String,
     val sorting: SortingEntity,
     var favorite: Boolean = false
 ) : EntityModel {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "entity_id")
-    var entityId: Long = 0
     override fun toDomainModel(): Restaurant =
         Restaurant(
             id = entityId,
             favorite = favorite,
             name = name,
-            status = status,
+            status = Status.fromValue(status),
             sortingValues = sorting.toDomainModel()
         )
 }
@@ -62,12 +63,34 @@ data class SortingEntity(
 
 internal fun RestaurantData.toEntityModel() =
     RestaurantEntity(
+        entityId = 0,
         name = name,
         status = status,
         sorting = sortingValues.toEntityModel()
     )
 
 internal fun SortingValuesData.toEntityModel() =
+    SortingEntity(
+        bestMatch = bestMatch,
+        newest = newest,
+        ratingAverage = ratingAverage,
+        distance = distance,
+        popularity = popularity,
+        averageProductPrice = averageProductPrice,
+        deliveryCosts = deliveryCosts,
+        minCost = minCost
+    )
+
+internal fun Restaurant.toEntityModel() =
+    RestaurantEntity(
+        entityId = id,
+        name = name,
+        status = status?.value ?: "unknown",
+        favorite = favorite,
+        sorting = sortingValues.toEntityModel()
+    )
+
+internal fun SortingDetail.toEntityModel() =
     SortingEntity(
         bestMatch = bestMatch,
         newest = newest,

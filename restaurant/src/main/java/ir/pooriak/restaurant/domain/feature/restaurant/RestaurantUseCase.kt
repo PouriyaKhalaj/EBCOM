@@ -1,6 +1,7 @@
 package ir.pooriak.restaurant.domain.feature.restaurant
 
 import ir.pooriak.core.usecase.DomainResult
+import ir.pooriak.restaurant.domain.model.Restaurant
 import ir.pooriak.restaurant.domain.model.Restaurants
 
 /**
@@ -9,4 +10,5 @@ import ir.pooriak.restaurant.domain.model.Restaurants
 
 interface RestaurantUseCase {
     fun restaurants(result: DomainResult<Restaurants>)
+    fun favorite(restaurant: Restaurant)
 }

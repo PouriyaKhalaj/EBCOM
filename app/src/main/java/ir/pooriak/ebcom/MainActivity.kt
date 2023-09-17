@@ -13,11 +13,11 @@ class MainActivity : BaseActivity() {
 
     override fun doOnResume() = Unit
 
-    override fun doOnBackPressed(): Boolean = true
+    override fun doOnBackPressed(): Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         goToActivity(restaurantIntent(this))
+        finish()
+        super.onCreate(savedInstanceState)
     }
 }

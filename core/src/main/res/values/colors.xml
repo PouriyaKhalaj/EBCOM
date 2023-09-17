@@ -8,4 +8,5 @@
     <color name="primary">#194b9b</color>
     <color name="surface_on_primary">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="on_sec_bg_surface_3">#4d000000</color>
 </resources>

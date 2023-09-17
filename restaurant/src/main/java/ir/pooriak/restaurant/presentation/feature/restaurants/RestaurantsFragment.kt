@@ -1,9 +1,11 @@
 package ir.pooriak.restaurant.presentation.feature.restaurants
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ir.pooriak.core.view.fragment.BaseFragment
@@ -23,6 +25,10 @@ class RestaurantsFragment : BaseFragment() {
 
     private val adapter: RestaurantsAdapter by inject()
     private val viewModel: RestaurantsViewModel by viewModel()
+    private val sortList by lazy {
+        resources.getStringArray(R.array.sortin_value_array).toList()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,14 +40,38 @@ class RestaurantsFragment : BaseFragment() {
 
     override fun setupView() {
         toolbarTitle(getString(R.string.restaurants))
+        toolbarEndIcon(R.drawable.ic_baseline_filter_alt_24) {
+            showFilterPopup(it, sortList)
+        }
+        visibilityToolbarAction(false)
         setupRecyclerView()
     }
 
+    private fun showFilterPopup(view: View, sortList: List<String>) {
+        val popup = PopupMenu(requireContext(), view)
+        sortList.forEach {
+            popup.menu.add(it)
+        }
+        popup.gravity = Gravity.START
+        popup.menu.setGroupCheckable(1, true, true)
+        popup.setOnMenuItemClickListener { item ->
+            viewModel.event(RestaurantsEvent.SortBy(sortList.indexOf(item.title)))
+            true
+        }
+        popup.show()
+    }
+
     override fun setupUiListener() {
-        adapter.onItemClickedListener = {
-            findNavController().navigate(
-                RestaurantsFragmentDirections.actionRestaurantsFragmentToDetailFragment(it)
-            )
+        adapter.apply {
+            onItemClickedListener = {
+                findNavController().navigate(
+                    RestaurantsFragmentDirections.actionRestaurantsFragmentToDetailFragment(it)
+                )
+            }
+
+            onFavoriteClickedListener = { item, selected ->
+                viewModel.event(RestaurantsEvent.Favorite(item, selected))
+            }
         }
     }
 

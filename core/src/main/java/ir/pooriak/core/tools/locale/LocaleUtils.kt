@@ -22,7 +22,6 @@ class LocaleUtils {
 
         private fun loadLocale(context: Context): Locale {
             val preferences: SharedPreferences = getPreferences(context)
-            Locales.PERSIAN
             val language = preferences.getString(SELECTED_LANGUAGE, PERSIAN_LANGUAGE_CODE)
             val country = preferences.getString(SELECTED_COUNTRY, PERSIAN_COUNTRY_CODE)
             return Locale(language.toString(), country.toString())

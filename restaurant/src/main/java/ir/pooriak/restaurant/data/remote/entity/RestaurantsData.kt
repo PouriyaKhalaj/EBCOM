@@ -5,6 +5,7 @@ import ir.pooriak.core.base.DataModel
 import ir.pooriak.restaurant.domain.model.Restaurant
 import ir.pooriak.restaurant.domain.model.Restaurants
 import ir.pooriak.restaurant.domain.model.SortingDetail
+import ir.pooriak.restaurant.domain.model.Status
 
 /**
  * Created by POORIAK on 12,September,2023
@@ -25,7 +26,7 @@ data class RestaurantData(
         id = 0,
         favorite = false,
         name = name,
-        status = status,
+        status = Status.fromValue(status),
         sortingValues = sortingValues.toDomainModel()
     )
 }

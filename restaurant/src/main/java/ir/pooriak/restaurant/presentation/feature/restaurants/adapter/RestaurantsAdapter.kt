@@ -9,8 +9,9 @@ import ir.pooriak.restaurant.presentation.feature.restaurants.viewholder.Restaur
  * Created by POORIAK on 15,September,2023
  */
 class RestaurantsAdapter : RecyclerView.Adapter<RestaurantViewHolder>() {
-    private var items: List<Restaurant> = emptyList()
+    private var items: ArrayList<Restaurant> = arrayListOf()
     var onItemClickedListener: ((Restaurant) -> Unit)? = null
+    var onFavoriteClickedListener: ((Restaurant, Boolean) -> Unit)? = null
 
     override fun getItemCount() = items.size
 
@@ -22,13 +23,20 @@ class RestaurantsAdapter : RecyclerView.Adapter<RestaurantViewHolder>() {
         viewType: Int
     ): RestaurantViewHolder {
         return RestaurantViewHolder.create(
-            parent,
-            onItemClickedListener
+            parent = parent,
+            onItemClickedListener = onItemClickedListener,
+            onFavoriteClickedListener = { restaurant: Restaurant, favorite: Boolean, position: Int ->
+                items[position] = restaurant.apply {
+                    this.favorite = favorite
+                }
+                notifyItemChanged(position)
+                onFavoriteClickedListener?.invoke(restaurant, favorite)
+            }
         )
     }
 
     fun setItems(items: List<Restaurant>) {
-        this.items = items
+        this.items = ArrayList(items)
         notifyDataSetChanged()
     }
 }

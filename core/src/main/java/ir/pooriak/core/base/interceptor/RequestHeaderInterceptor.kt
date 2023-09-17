@@ -6,7 +6,6 @@ import android.os.Build
 import android.provider.Settings
 import android.webkit.WebSettings
 import ir.pooriak.core.BuildConfig
-import ir.pooriak.core.base.NetworkSSLHandshakeException
 import ir.pooriak.core.tools.deviceIpAddress
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -40,7 +39,7 @@ internal class RequestHeaderInterceptor(val context: Context) : Interceptor {
         try {
             return doRequest(chain)
         } catch (e: SSLHandshakeException) {
-            throw NetworkSSLHandshakeException()
+            throw e
         }
 
     }
