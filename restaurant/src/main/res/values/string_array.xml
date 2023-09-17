@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sortin_value_array">
-        <item>Rating Average</item>
         <item>Best Match</item>
+        <item>Rating Average</item>
         <item>Newest</item>
         <item>Distance</item>
         <item>Popularity</item>

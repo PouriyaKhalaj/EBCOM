@@ -1,7 +1,6 @@
 package ir.pooriak.restaurant.domain.model
 
 import android.os.Parcelable
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import ir.pooriak.core.base.DomainModel
 import ir.pooriak.restaurant.R

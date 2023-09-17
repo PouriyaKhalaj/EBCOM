@@ -4,6 +4,7 @@ import ir.pooriak.core.usecase.UseCaseState
 import ir.pooriak.core.viewmodel.BaseViewModel
 import ir.pooriak.restaurant.domain.feature.restaurant.RestaurantUseCase
 import ir.pooriak.restaurant.domain.model.Restaurant
+import ir.pooriak.restaurant.domain.model.Status
 
 /**
  * Created by POORIAK on 13,September,2023
@@ -22,20 +23,26 @@ class RestaurantsViewModel(private val restaurantUseCase: RestaurantUseCase) :
     }
 
     private fun sortByPosition(position: Int) {
-        restaurants.sortByDescending { item ->
-            when (position) {
-                1 -> item.sortingValues.bestMatch
-                2 -> item.sortingValues.newest
-                3 -> item.sortingValues.distance.toFloat()
-                4 -> item.sortingValues.popularity
-                5 -> item.sortingValues.averageProductPrice.toFloat()
-                6 -> item.sortingValues.deliveryCosts.toFloat()
-                7 -> item.sortingValues.minCost.toFloat()
-                else -> item.sortingValues.ratingAverage
+        restaurants.sortWith(compareBy(
+            { it.favorite },
+            { it.status == Status.OPEN },
+            { it.status == Status.ORDER_AHEAD },
+            { it.status == Status.CLOSED },
+            {
+                when (position) {
+                    1 -> it.sortingValues.ratingAverage
+                    2 -> it.sortingValues.newest
+                    3 -> it.sortingValues.distance.toFloat()
+                    4 -> it.sortingValues.popularity
+                    5 -> it.sortingValues.averageProductPrice.toFloat()
+                    6 -> it.sortingValues.deliveryCosts.toFloat()
+                    7 -> it.sortingValues.minCost.toFloat()
+                    else -> it.sortingValues.bestMatch
+                }
             }
-        }
+        ))
 
-        state.postValue(RestaurantsState.Restaurants(restaurants))
+        state.postValue(RestaurantsState.Restaurants(restaurants.reversed()))
     }
 
     private fun favorite(restaurant: Restaurant, selected: Boolean) {
@@ -47,15 +54,9 @@ class RestaurantsViewModel(private val restaurantUseCase: RestaurantUseCase) :
     private fun getRestaurants() {
         restaurantUseCase.restaurants {
             when (it) {
-//                is UseCaseState.ApiError -> TODO()
-//                is UseCaseState.Error -> TODO()
-//                is UseCaseState.Loading -> TODO()
-//                is UseCaseState.NetworkError -> TODO()
                 is UseCaseState.Success -> {
                     restaurants = it.data.restaurants.toMutableList()
-                    state.postValue(RestaurantsState.Restaurants(restaurants.apply {
-                        this@apply.sortByDescending { item -> item.sortingValues.ratingAverage }
-                    }))
+                    sortByPosition(0)
                 }
 
                 else -> Unit
