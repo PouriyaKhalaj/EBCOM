@@ -1,7 +1,6 @@
 package ir.pooriak.ebcom
 
 import android.app.Application
-import androidx.multidex.MultiDexApplication
 import androidx.paging.ExperimentalPagingApi
 import ir.pooriak.ebcom.di.applicationModule
 import org.koin.android.ext.koin.androidContext
