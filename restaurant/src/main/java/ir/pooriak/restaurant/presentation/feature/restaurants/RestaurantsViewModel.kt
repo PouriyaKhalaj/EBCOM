@@ -5,6 +5,7 @@ import ir.pooriak.core.viewmodel.BaseViewModel
 import ir.pooriak.restaurant.domain.feature.restaurant.RestaurantUseCase
 import ir.pooriak.restaurant.domain.model.Restaurant
 import ir.pooriak.restaurant.domain.model.Status
+import ir.pooriak.restaurant.presentation.utils.SortType
 
 /**
  * Created by POORIAK on 13,September,2023
@@ -13,34 +14,40 @@ class RestaurantsViewModel(private val restaurantUseCase: RestaurantUseCase) :
     BaseViewModel<RestaurantsState, RestaurantsEvent>() {
 
     private var restaurants: MutableList<Restaurant> = mutableListOf()
+    private lateinit var currentSortFilter: SortType
 
     override fun onEvent(event: RestaurantsEvent) {
         when (event) {
-            RestaurantsEvent.Restaurants -> getRestaurants()
+            RestaurantsEvent.Restaurants -> {
+                if (!::currentSortFilter.isInitialized)
+                    getRestaurants()
+            }
+
             is RestaurantsEvent.Favorite -> favorite(event.restaurant, event.selected)
-            is RestaurantsEvent.SortBy -> sortByPosition(event.position)
+            is RestaurantsEvent.SortBy -> sortBySortType(event.sortFilter)
         }
     }
 
-    private fun sortByPosition(position: Int) {
-        restaurants.sortWith(compareBy(
+    private fun sortBySortType(sortFilter: SortType) {
+        currentSortFilter = sortFilter
+
+        restaurants.sortWith(compareBy<Restaurant>(
             { it.favorite },
             { it.status == Status.OPEN },
             { it.status == Status.ORDER_AHEAD },
-            { it.status == Status.CLOSED },
-            {
-                when (position) {
-                    1 -> it.sortingValues.ratingAverage
-                    2 -> it.sortingValues.newest
-                    3 -> it.sortingValues.distance.toFloat()
-                    4 -> it.sortingValues.popularity
-                    5 -> it.sortingValues.averageProductPrice.toFloat()
-                    6 -> it.sortingValues.deliveryCosts.toFloat()
-                    7 -> it.sortingValues.minCost.toFloat()
-                    else -> it.sortingValues.bestMatch
-                }
+            { it.status == Status.CLOSED }
+        ).thenBy {
+            when (sortFilter) {
+                SortType.BEST_MATCH -> it.sortingValues.bestMatch
+                SortType.NEWEST -> it.sortingValues.newest
+                SortType.RATING_AVERAGE -> it.sortingValues.ratingAverage
+                SortType.DISTANCE -> it.sortingValues.distance.toFloat()
+                SortType.POPULARITY -> it.sortingValues.popularity
+                SortType.AVERAGE_PRODUCT_PRICE -> it.sortingValues.averageProductPrice.toFloat()
+                SortType.DELIVERY_COSTS -> it.sortingValues.deliveryCosts.toFloat()
+                SortType.MIN_COST -> it.sortingValues.minCost.toFloat()
             }
-        ))
+        })
 
         state.postValue(RestaurantsState.Restaurants(restaurants.reversed()))
     }
@@ -49,6 +56,7 @@ class RestaurantsViewModel(private val restaurantUseCase: RestaurantUseCase) :
         restaurantUseCase.favorite(restaurant.apply {
             favorite = selected
         })
+        sortBySortType(currentSortFilter)
     }
 
     private fun getRestaurants() {
@@ -56,7 +64,7 @@ class RestaurantsViewModel(private val restaurantUseCase: RestaurantUseCase) :
             when (it) {
                 is UseCaseState.Success -> {
                     restaurants = it.data.restaurants.toMutableList()
-                    sortByPosition(0)
+                    sortBySortType(SortType.BEST_MATCH)
                 }
 
                 else -> Unit

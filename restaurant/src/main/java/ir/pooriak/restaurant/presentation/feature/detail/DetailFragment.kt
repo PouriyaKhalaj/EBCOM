@@ -93,6 +93,10 @@ class DetailFragment : BaseFragment() {
                 value = "${model.newest}"
             ),
             TitleValue.StringStyle(
+                title = getString(R.string.rating_average),
+                value = "${model.ratingAverage}"
+            ),
+            TitleValue.StringStyle(
                 title = getString(R.string.distance),
                 value = "${NumberFormat.getIntegerInstance().format(model.distance.toLong())}"
             ),

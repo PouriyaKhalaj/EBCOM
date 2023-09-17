@@ -5,6 +5,7 @@ import ir.pooriak.core.base.NetworkErrorDetail
 import ir.pooriak.core.viewmodel.BaseState
 import ir.pooriak.core.viewmodel.BaseViewModelEvent
 import ir.pooriak.restaurant.domain.model.Restaurant
+import ir.pooriak.restaurant.presentation.utils.SortType
 
 /**
  * Created by POORIAK on 13,September,2023
@@ -23,6 +24,6 @@ sealed class RestaurantsEvent : BaseViewModelEvent {
     data object Restaurants : RestaurantsEvent()
     data class Favorite(val restaurant: Restaurant, val selected: Boolean) : RestaurantsEvent()
 
-    data class SortBy(val position: Int): RestaurantsEvent()
+    data class SortBy(val sortFilter: SortType): RestaurantsEvent()
 
 }

@@ -9,6 +9,7 @@
     <!--  sorting values  -->
     <string name="best_match">Best Match</string>
     <string name="newest">Newest</string>
+    <string name="rating_average">Rating Average</string>
     <string name="distance">Distance</string>
     <string name="popularity">Popularity</string>
     <string name="average_product_price">Average Product Price</string>

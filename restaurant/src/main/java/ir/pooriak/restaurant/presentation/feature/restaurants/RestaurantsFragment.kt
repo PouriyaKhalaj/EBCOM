@@ -12,6 +12,7 @@ import ir.pooriak.core.view.fragment.BaseFragment
 import ir.pooriak.restaurant.R
 import ir.pooriak.restaurant.databinding.FragmentRestaurantsBinding
 import ir.pooriak.restaurant.presentation.feature.restaurants.adapter.RestaurantsAdapter
+import ir.pooriak.restaurant.presentation.utils.SortType
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,12 +27,11 @@ class RestaurantsFragment : BaseFragment() {
     private val adapter: RestaurantsAdapter by inject()
     private val viewModel: RestaurantsViewModel by viewModel()
     private val sortList by lazy {
-        resources.getStringArray(R.array.sortin_value_array).toList()
+        SortType.filterList().map { getString(it.value) }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _mBinding = FragmentRestaurantsBinding.inflate(inflater, container, false)
         viewModel.event(RestaurantsEvent.Restaurants)
@@ -55,7 +55,13 @@ class RestaurantsFragment : BaseFragment() {
         popup.gravity = Gravity.START
         popup.menu.setGroupCheckable(1, true, true)
         popup.setOnMenuItemClickListener { item ->
-            viewModel.event(RestaurantsEvent.SortBy(sortList.indexOf(item.title)))
+            viewModel.event(
+                RestaurantsEvent.SortBy(
+                    SortType.typeFromIndexList(
+                        sortList.indexOf(item.title)
+                    )
+                )
+            )
             true
         }
         popup.show()
